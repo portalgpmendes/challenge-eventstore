@@ -31,17 +31,12 @@ public class ConcurrentEventStoreTest {
 	private Event event7;
 	private Event event8;
 	
-	private void assertEvent(String type, long timestamp) {
-		Event event = eventIterator.current();
-		assertEquals(type, event.type());
-		assertEquals(timestamp, event.timestamp());
-	}
-	
-	private void assertEvents(String type, long initialTimeStamp) {
-		long i = initialTimeStamp;
+	private void assertEvents(String type, long count) {
+		long i = count;
 		while(eventIterator.moveNext()) {
 			Event event = eventIterator.current();
-			assertEvent(event.type(), i);
+			assertEquals(type, event.type());
+			assertEquals(i, event.timestamp());
 			i++;
 		}
 	}
@@ -146,13 +141,13 @@ public class ConcurrentEventStoreTest {
 		eventIterator = eventStore.query("Type 1", 1L, 2L);
 		assertEquals(1, eventIterator.totalEvents());
 		eventIterator.moveNext();
-		assertEvent("Type 1", 1L);
+		assertEvents("Type 1", 1L);
 		
 		// event3
 		eventIterator = eventStore.query("Type 2", 2L, 4L);
 		assertEquals(1, eventIterator.totalEvents());
 		eventIterator.moveNext();
-		assertEvent("Type 2", 3L);
+		assertEvents("Type 2", 3L);
 		
 		// event7 e event8
 		eventIterator = eventStore.query("Type 3", 7L, 9L);

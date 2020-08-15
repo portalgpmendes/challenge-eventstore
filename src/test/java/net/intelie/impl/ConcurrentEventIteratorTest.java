@@ -96,12 +96,12 @@ public class ConcurrentEventIteratorTest {
 		
 		Event current;
 		
-		// get the first event
+		// gets the first event
 		current = eventIterator1.current();
 		assertEquals("Type 0", current.type());
 		assertEquals(0L, current.timestamp());
 		
-		// remove the second event
+		// removes the first event
 		eventIterator1.remove();
 		assertEquals(2, eventIterator1.totalEvents());
 	}
