@@ -22,6 +22,12 @@ public interface EventStore {
      * @param type
      */
     void removeAll(String type);
+    
+    /** 
+     * Removes one event of the store.
+     * @param event
+     */
+    void remove(Event event);
 
     /**
      * Retrieves an iterator for events based on their type and timestamp.
