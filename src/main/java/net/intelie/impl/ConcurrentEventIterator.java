@@ -30,33 +30,33 @@ public class ConcurrentEventIterator implements EventIterator{
 
 	@Override
 	public synchronized boolean moveNext() {
-		if(position == events.size()) {
-			moveNext = false;
-			return moveNext;
-		} else {
+		if(position < events.size()) {
 			current = events.get(position);
 			position++;
 			moveNext = true; 
 			return moveNext;
+		} else {
+			moveNext = false;
+			return moveNext;
 		}
-	
 	}
 
 	@Override
 	public Event current() {
-		if(moveNext)
-		    return current;
-		else
-			throw new IllegalStateException("moveNext was never called or its last result was false!");
+		if(!moveNext) {
+		   throw new IllegalStateException("moveNext was never called or its last result was false!");
+		}
+
+		return current;
 	}
 
 	@Override
 	public synchronized void remove() {
-		if(moveNext) {
-			events.remove(current);
+		if(!moveNext) {
+		   throw new IllegalStateException("moveNext was never called or its last result was false!");
 		}
-		else
-			throw new IllegalStateException("moveNext was never called or its last result was false!");
+
+		events.remove(current);
 	}
 
 }

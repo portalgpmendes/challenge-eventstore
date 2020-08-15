@@ -44,7 +44,6 @@ public class ConcurrentEventStore implements EventStore {
 		return total;
 	}
 	
-	
 	@Override
 	public synchronized void insert(Event event) {
 		if(event == null) {
@@ -53,13 +52,13 @@ public class ConcurrentEventStore implements EventStore {
 		
 		List<Event> events;		
 		
-		if(!eventMap.containsKey(event.type())) {
+		if(eventMap.containsKey(event.type())) {
+			events = eventMap.get(event.type());
+			events.add(event);
+		} else {
 			events = new ArrayList<>();
 			events.add(event);
 			eventMap.put(event.type(), events);
-		} else {
-			events = eventMap.get(event.type());
-			events.add(event);
 		}
 	}
 

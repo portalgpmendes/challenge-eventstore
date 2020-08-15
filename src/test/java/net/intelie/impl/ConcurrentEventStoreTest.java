@@ -105,6 +105,9 @@ public class ConcurrentEventStoreTest {
 		assertEquals(0, eventStore.totalEvents());
 		createEventsWithDistinctType();
 		assertEquals(3, eventStore.totalEvents());
+		assertEquals(1, eventStore.totalEvents("Type 1"));
+		assertEquals(1, eventStore.totalEvents("Type 2"));
+		assertEquals(1, eventStore.totalEvents("Type 3"));
 	}
 	
 	@Test
