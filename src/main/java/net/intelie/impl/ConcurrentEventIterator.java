@@ -4,19 +4,16 @@ import java.util.List;
 
 import net.intelie.challenges.Event;
 import net.intelie.challenges.EventIterator;
-import net.intelie.challenges.EventStore;
 
 public class ConcurrentEventIterator implements EventIterator{
 	
 	private List<Event> events;
-	private EventStore eventStore;
 	private Event current;
 	private int position;
 	private boolean moveNext;
 	
-	public ConcurrentEventIterator(List<Event> events, EventStore eventStore) {
+	public ConcurrentEventIterator(List<Event> events) {
 		this.events = events;
-		this.eventStore = eventStore;
 		position = 0;
 		moveNext = false;
 	}
@@ -50,17 +47,16 @@ public class ConcurrentEventIterator implements EventIterator{
 		if(moveNext)
 		    return current;
 		else
-			throw new IllegalStateException();
+			throw new IllegalStateException("moveNext was never called or its last result was false!");
 	}
 
 	@Override
 	public synchronized void remove() {
 		if(moveNext) {
 			events.remove(current);
-			eventStore.remove(current);
 		}
 		else
-			throw new IllegalStateException();
+			throw new IllegalStateException("moveNext was never called or its last result was false!");
 	}
 
 }

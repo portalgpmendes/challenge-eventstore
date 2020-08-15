@@ -96,7 +96,7 @@ public class ConcurrentEventStore implements EventStore {
                        .filter(event -> event.timestamp() >= startTime && event.timestamp() < endTime)
                        .collect(Collectors.toList());
 		
-		return new ConcurrentEventIterator(events, this);
+		return new ConcurrentEventIterator(events);
 	}
 
 }

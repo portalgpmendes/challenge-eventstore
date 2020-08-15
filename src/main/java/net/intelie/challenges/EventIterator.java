@@ -6,7 +6,7 @@ package net.intelie.challenges;
 public interface EventIterator extends AutoCloseable {
 	
 	/**
-	 * Calculates the total number of events. 
+	 * Calculates the total number of events handled by the iterator. 
 	 * @return number of events
 	 */
 	int totalEvents();

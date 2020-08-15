@@ -1,5 +1,8 @@
 package net.intelie.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -13,14 +16,10 @@ import net.intelie.challenges.EventIterator;
 import net.intelie.challenges.EventStore;
 import net.intelie.runnable.EventStoreRunnable;
 
-import static org.junit.Assert.*;
-
 public class ConcurrentEventStoreTest {
 	
 	private EventStore eventStore;
-	
 	private EventIterator eventIterator;
-	
 	private EventStoreRunnable eventStoreRunnable;
 	
 	private Event event1;
@@ -32,7 +31,7 @@ public class ConcurrentEventStoreTest {
 	private Event event7;
 	private Event event8;
 	
-	public void createEvents() {	  
+	private void createEvents() {	  
 		event1 = new Event("Type 1", 1L);
 		eventStore.insert(event1);
 		
@@ -58,7 +57,7 @@ public class ConcurrentEventStoreTest {
 		eventStore.insert(event8);
 	}
 	
-	public void createEventsWithDistinctType() {	  
+	private void createEventsWithDistinctType() {	  
 		event1 = new Event("Type 1", 1L);
 		eventStore.insert(event1);
 		
@@ -69,7 +68,7 @@ public class ConcurrentEventStoreTest {
 		eventStore.insert(event3);		
 	}
 	
-	public void createEventsWithSameType() {	  
+	private void createEventsWithSameType() {	  
 		event1 = new Event("Type 1", 1L);
 		eventStore.insert(event1);
 		
@@ -85,7 +84,7 @@ public class ConcurrentEventStoreTest {
 		eventStore = new ConcurrentEventStore();
 		eventStoreRunnable = new EventStoreRunnable(eventStore);
 	}	
-	
+
 	@Test
 	public void testInsert() {
 		assertEquals(0, eventStore.totalEvents());
@@ -112,7 +111,7 @@ public class ConcurrentEventStoreTest {
 		        .forEach(i -> service.submit(eventStoreRunnable.insertEvent(i)));
 
 		service.awaitTermination(1000, TimeUnit.MILLISECONDS);
-		
+	
 		assertEquals(100, eventStore.totalEvents());
 	}
 	
@@ -129,7 +128,7 @@ public class ConcurrentEventStoreTest {
 		eventIterator = eventStore.query("Type 3", 5L, 8L);
 		assertEquals(3, eventIterator.totalEvents());
 		
-		long i = 5L;
+		long i = 5L;		
 		while(eventIterator.moveNext()) {
 			Event event = eventIterator.current();
 			assertEquals("Type 3", event.type());
