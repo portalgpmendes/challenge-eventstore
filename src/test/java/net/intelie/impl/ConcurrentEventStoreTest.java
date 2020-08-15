@@ -31,6 +31,21 @@ public class ConcurrentEventStoreTest {
 	private Event event7;
 	private Event event8;
 	
+	private void assertEvent(String type, long timestamp) {
+		Event event = eventIterator.current();
+		assertEquals(type, event.type());
+		assertEquals(timestamp, event.timestamp());
+	}
+	
+	private void assertEvents(String type, long initialTimeStamp) {
+		long i = initialTimeStamp;
+		while(eventIterator.moveNext()) {
+			Event event = eventIterator.current();
+			assertEvent(event.type(), i);
+			i++;
+		}
+	}
+	
 	private void createEvents() {	  
 		event1 = new Event("Type 1", 1L);
 		eventStore.insert(event1);
@@ -66,8 +81,8 @@ public class ConcurrentEventStoreTest {
 		
 		event3 = new Event("Type 3", 3L);
 		eventStore.insert(event3);		
-	}
-	
+	}	
+
 	private void createEventsWithSameType() {	  
 		event1 = new Event("Type 1", 1L);
 		eventStore.insert(event1);
@@ -83,8 +98,8 @@ public class ConcurrentEventStoreTest {
 	public void setUp() {
 		eventStore = new ConcurrentEventStore();
 		eventStoreRunnable = new EventStoreRunnable(eventStore);
-	}	
-
+	}
+	
 	@Test
 	public void testInsert() {
 		assertEquals(0, eventStore.totalEvents());
@@ -113,21 +128,6 @@ public class ConcurrentEventStoreTest {
 		service.awaitTermination(1000, TimeUnit.MILLISECONDS);
 	
 		assertEquals(100, eventStore.totalEvents());
-	}
-	
-	private void assertEvents(String type, long initialTimeStamp) {
-		long i = initialTimeStamp;
-		while(eventIterator.moveNext()) {
-			Event event = eventIterator.current();
-			assertEvent(event.type(), i);
-			i++;
-		}
-	}
-	
-	private void assertEvent(String type, long timestamp) {
-		Event event = eventIterator.current();
-		assertEquals(type, event.type());
-		assertEquals(timestamp, event.timestamp());
 	}
 		
 	@Test
