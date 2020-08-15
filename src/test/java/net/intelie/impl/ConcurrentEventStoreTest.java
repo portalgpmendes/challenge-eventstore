@@ -196,6 +196,25 @@ public class ConcurrentEventStoreTest {
 	}
 	
 	@Test
+	public void testRemove() throws InterruptedException {
+		createEvents();
+		
+		assertEquals(8, eventStore.totalEvents());
+		assertEquals(2, eventStore.totalEvents("Type 1"));
+		assertEquals(5, eventStore.totalEvents("Type 3"));
+		
+		// Removes event1 with Type 1
+		eventStore.remove(event1);
+		assertEquals(7, eventStore.totalEvents());
+		assertEquals(1, eventStore.totalEvents("Type 1"));
+		
+		// Removes event7 with Type 3
+		eventStore.remove(event7);
+		assertEquals(6, eventStore.totalEvents());
+		assertEquals(4, eventStore.totalEvents("Type 3"));;
+	}
+	
+	@Test
 	public void testRemove_EventWithInexistentType() {
 		try{	
 			createEventsWithDistinctType();
