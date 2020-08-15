@@ -115,26 +115,51 @@ public class ConcurrentEventStoreTest {
 		assertEquals(100, eventStore.totalEvents());
 	}
 	
+	private void assertEvents(String type, long initialTimeStamp) {
+		long i = initialTimeStamp;
+		while(eventIterator.moveNext()) {
+			Event event = eventIterator.current();
+			assertEvent(event.type(), i);
+			i++;
+		}
+	}
+	
+	private void assertEvent(String type, long timestamp) {
+		Event event = eventIterator.current();
+		assertEquals(type, event.type());
+		assertEquals(timestamp, event.timestamp());
+	}
+		
 	@Test
 	public void testQuery() {
 		createEvents();
 		
+		// event1 and event2
 		eventIterator = eventStore.query("Type 1", 1L, 3L);
 		assertEquals(2, eventIterator.totalEvents());
+		assertEvents("Type 1", 1L);
 		
+		// event1
 		eventIterator = eventStore.query("Type 1", 1L, 2L);
 		assertEquals(1, eventIterator.totalEvents());
+		eventIterator.moveNext();
+		assertEvent("Type 1", 1L);
 		
+		// event3
+		eventIterator = eventStore.query("Type 2", 2L, 4L);
+		assertEquals(1, eventIterator.totalEvents());
+		eventIterator.moveNext();
+		assertEvent("Type 2", 3L);
+		
+		// event7 e event8
+		eventIterator = eventStore.query("Type 3", 7L, 9L);
+		assertEquals(2, eventIterator.totalEvents());
+		assertEvents("Type 3", 7L);
+				
+		// event5, event6 e event7
 		eventIterator = eventStore.query("Type 3", 5L, 8L);
-		assertEquals(3, eventIterator.totalEvents());
-		
-		long i = 5L;		
-		while(eventIterator.moveNext()) {
-			Event event = eventIterator.current();
-			assertEquals("Type 3", event.type());
-			assertEquals(i, event.timestamp());
-			i++;
-		}
+		assertEquals(3, eventIterator.totalEvents());	
+		assertEvents("Type 3", 5L);
 	}
 	
 	@Test
