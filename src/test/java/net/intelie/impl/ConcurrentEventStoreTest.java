@@ -139,6 +139,39 @@ public class ConcurrentEventStoreTest {
 	}
 	
 	@Test
+	public void testQuery_EventWithInexistentType() {
+		try{	
+			createEvents();
+            eventStore.query("AAA", 1L, 3L);        
+            fail("Shoud have given error!");
+        } catch (IllegalStateException e){
+            assertEquals("Error! There are no events with type AAA", e.getMessage());
+        }
+	}
+	
+	@Test
+	public void testQuery_EventWithNullType() {
+		try{	
+			createEvents();
+            eventStore.query(null, 1L, 3L);        
+            fail("Shoud have given error!");
+        } catch (NullPointerException e){
+            assertEquals("Error! Cannot search for events with null type.", e.getMessage());
+        }
+	}
+	
+	@Test
+	public void testQuery_StartTimeGreaterThanEndTime() {
+		try{	
+			createEvents();
+            eventStore.query("Type 1", 3L, 1L);        
+            fail("Shoud have given error!");
+        } catch (IllegalStateException e){
+            assertEquals("Error! startTime must be less than endTime", e.getMessage());
+        }
+	}
+	
+	@Test
 	public void testRemove_EventWithInexistentType() {
 		try{	
 			createEventsWithDistinctType();
