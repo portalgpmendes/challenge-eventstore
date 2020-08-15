@@ -1,6 +1,7 @@
 package net.intelie.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -19,13 +20,30 @@ public class ConcurrentEventStore implements EventStore {
 	
 	@Override
 	public int totalEvents() {
-		int total = eventMap.values()
-	               .stream()
-	               .mapToInt(list -> list.size())
-	               .sum();
+		int total = 0;
+		
+		Collection<List<Event>> eventLists = eventMap.values();
+		if(eventLists != null) {
+			total = eventLists.stream()
+				              .mapToInt(list -> list.size())
+				              .sum();
+		}
 	               
 		return total;
 	}
+	
+	@Override
+	public int totalEvents(String type) {
+		int total = 0;
+		
+		List<Event> eventsWithType = eventMap.get(type);
+		if(eventsWithType != null) {
+			total = eventsWithType.size();
+		}
+	               
+		return total;
+	}
+	
 	
 	@Override
 	public synchronized void insert(Event event) {

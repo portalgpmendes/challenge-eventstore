@@ -245,6 +245,18 @@ public class ConcurrentEventStoreTest {
 	}
 	
 	@Test
+	public void testRemoveAll() {
+		createEvents();
+		
+		assertEquals(2, eventStore.totalEvents("Type 1"));
+		assertEquals(1, eventStore.totalEvents("Type 2"));
+		assertEquals(5, eventStore.totalEvents("Type 3"));
+		
+		eventStore.removeAll("Type 3");
+		assertEquals(0, eventStore.totalEvents("Type 3"));
+	}
+	
+	@Test
 	public void testRemoveAll_EventWithInexistentType() {
 		try{	
 			createEventsWithDistinctType();

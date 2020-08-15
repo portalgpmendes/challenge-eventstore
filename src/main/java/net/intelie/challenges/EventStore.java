@@ -15,6 +15,14 @@ public interface EventStore {
 	 */
 	public int totalEvents();
 	
+	
+	/**
+	 * Calculates the total number of events bt type.
+	 * @param type
+	 * @return
+	 */
+	public int totalEvents(String type);
+	
     /**
      * Stores an event
      *
