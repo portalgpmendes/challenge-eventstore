@@ -20,6 +20,11 @@ public class ConcurrentEventIterator implements EventIterator{
 		position = 0;
 		moveNext = false;
 	}
+	
+	@Override
+	public int totalEvents() {               
+		return events.size();
+	}
 
 	@Override
 	public void close() throws Exception {

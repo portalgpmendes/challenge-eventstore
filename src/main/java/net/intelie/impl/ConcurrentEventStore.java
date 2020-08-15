@@ -17,6 +17,7 @@ public class ConcurrentEventStore implements EventStore {
 		eventMap = new ConcurrentHashMap<>();
 	}
 	
+	@Override
 	public int totalEvents() {
 		int total = eventMap.values()
 	               .stream()
@@ -60,7 +61,20 @@ public class ConcurrentEventStore implements EventStore {
 	
 	@Override
 	public synchronized void remove(Event event) {
-		 eventMap.get(event.type()).remove(event);
+		if(event == null) {
+			throw new NullPointerException("Error! Cannot remove a null event.");
+		}
+		
+		if(event.type() == null) {
+			throw new NullPointerException("Error! Cannot remove events with null type.");
+		}
+		
+		List<Event> events = eventMap.get(event.type());
+		if(events == null) {
+			throw new IllegalStateException("Error! There are no events with type " + event.type());
+		}
+		
+		events.remove(event);
 	}
 
 	@Override

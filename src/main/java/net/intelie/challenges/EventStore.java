@@ -8,6 +8,13 @@ package net.intelie.challenges;
  * event event store.
  */
 public interface EventStore {
+	
+	/**
+	 * Calculates the total number of events. 
+	 * @return number of events
+	 */
+	public int totalEvents();
+	
     /**
      * Stores an event
      *

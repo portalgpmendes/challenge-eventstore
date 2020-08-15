@@ -35,5 +35,17 @@ public class EventStoreRunnable {
 	    return r;
 
 	}
+	
+	public Runnable remove(Event event){
+
+	    Runnable r = new Runnable(){
+	        public void run(){
+	    		eventStore.remove(event);
+	        }
+	    };
+
+	    return r;
+
+	}
 
 }
