@@ -45,7 +45,7 @@ public class ConcurrentEventIteratorTest {
 	public void testCurrent_MoveNextFalse() {
 		try{
 			eventIterator1.current();        
-            fail("Shoud have given error!");
+            fail("Should have given error!");
         } catch (IllegalStateException e){
             assertEquals("moveNext was never called or its last result was false!", e.getMessage());
         }
@@ -110,7 +110,7 @@ public class ConcurrentEventIteratorTest {
 	public void testRemove_MoveNextFalse() {
 		try{
 			eventIterator1.remove();        
-            fail("Shoud have given error!");
+            fail("Should have given error!");
         } catch (IllegalStateException e){
             assertEquals("moveNext was never called or its last result was false!", e.getMessage());
         }
