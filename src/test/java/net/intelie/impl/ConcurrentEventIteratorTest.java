@@ -35,9 +35,9 @@ public class ConcurrentEventIteratorTest {
     }
 	
     @Before
-	public void setUp() {			
-		eventIterator1 = new ConcurrentEventIterator(createEvents(3));
-		eventIterator2 = new ConcurrentEventIterator(createEvents(100));
+	public void setUp() {
+		eventIterator1 = new ConcurrentEventIterator(createEvents(3), createEvents(3));
+		eventIterator2 = new ConcurrentEventIterator(createEvents(100), createEvents(100));
 		eventIteratorRunnable = new EventIteratorRunnable(eventIterator2);
 	}
 	

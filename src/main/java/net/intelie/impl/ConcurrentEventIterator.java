@@ -7,20 +7,22 @@ import net.intelie.challenges.EventIterator;
 
 public class ConcurrentEventIterator implements EventIterator{
 	
-	private List<Event> events;
+	private List<Event> eventsIterator;
+	private List<Event> eventsStore;
 	private Event current;
 	private int position;
 	private boolean moveNext;
 	
-	public ConcurrentEventIterator(List<Event> events) {
-		this.events = events;
+	public ConcurrentEventIterator(List<Event> eventsIterator, List<Event> eventsStore) {
+		this.eventsIterator = eventsIterator;
+		this.eventsStore = eventsStore;
 		position = 0;
 		moveNext = false;
 	}
 	
 	@Override
 	public int totalEvents() {               
-		return events.size();
+		return eventsIterator.size();
 	}
 
 	@Override
@@ -30,8 +32,8 @@ public class ConcurrentEventIterator implements EventIterator{
 
 	@Override
 	public synchronized boolean moveNext() {
-		if(position < events.size()) {
-			current = events.get(position);
+		if(position < eventsIterator.size()) {
+			current = eventsIterator.get(position);
 			position++;
 			moveNext = true; 
 			return moveNext;
@@ -56,7 +58,8 @@ public class ConcurrentEventIterator implements EventIterator{
 		   throw new IllegalStateException("moveNext was never called or its last result was false!");
 		}
 
-		events.remove(current);
+		eventsIterator.remove(current);
+		eventsStore.remove(current);
 	}
 
 }

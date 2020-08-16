@@ -100,8 +100,8 @@ public class ConcurrentEventStore implements EventStore {
 			throw new NullPointerException("Error! Cannot search for events with null type.");
 		}
 		
-		List<Event> events = eventMap.get(type);
-		if(events == null) {
+		List<Event> eventsStore = eventMap.get(type);
+		if(eventsStore == null) {
 			throw new IllegalStateException("Error! There are no events with type " + type);
 		}
 		
@@ -109,11 +109,11 @@ public class ConcurrentEventStore implements EventStore {
 			throw new IllegalStateException("Error! startTime must be less than endTime");
 		}
 		
-		events = events.stream()
+		List<Event> eventsIterator = eventsStore.stream()
                        .filter(event -> event.timestamp() >= startTime && event.timestamp() < endTime)
                        .collect(Collectors.toList());
 		
-		return new ConcurrentEventIterator(events);
-	}
+		return new ConcurrentEventIterator(eventsIterator, eventsStore);
+	} 
 
 }

@@ -209,7 +209,7 @@ public class ConcurrentEventStoreTest {
 		// Removes event7 with Type 3
 		eventStore.remove(event7);
 		assertEquals(6, eventStore.totalEvents());
-		assertEquals(4, eventStore.totalEvents("Type 3"));;
+		assertEquals(4, eventStore.totalEvents("Type 3"));
 	}
 	
 	@Test
@@ -259,6 +259,29 @@ public class ConcurrentEventStoreTest {
 		service.awaitTermination(1000, TimeUnit.MILLISECONDS);
 		
 		assertEquals(2, eventStore.totalEvents());
+	}
+	
+	@Test
+	public void testRemove_UsingIterator() throws InterruptedException {
+		createEvents();
+		
+		// checks the original size of store
+		assertEquals(8, eventStore.totalEvents());
+		
+		// checks the original size of the list handled by iterator
+		eventIterator = eventStore.query("Type 1", 1L, 3L);
+		assertEquals(2, eventIterator.totalEvents());
+		
+		// moves to event1
+		eventIterator.moveNext();
+		
+		// removes event1 using iterator
+		eventIterator.remove();
+		
+		// the store needs to be updated be removing 
+		// the current event throught the iterator 
+		assertEquals(7, eventStore.totalEvents());
+		assertEquals(1, eventIterator.totalEvents());
 	}
 	
 	@Test
