@@ -112,6 +112,11 @@ public class ConcurrentEventStore implements EventStore {
 		List<Event> eventsIterator = eventsStore.stream()
                        .filter(event -> event.timestamp() >= startTime && event.timestamp() < endTime)
                        .collect(Collectors.toList());
+		if(eventsIterator.isEmpty()) {
+			throw new IllegalStateException("Error! There are no events from type " + type 
+					                        + " with startTime greater than or equals to " 
+		                                    + startTime  + " and endTime less than " + endTime);
+		}
 		
 		return new ConcurrentEventIterator(eventsIterator, eventsStore);
 	} 

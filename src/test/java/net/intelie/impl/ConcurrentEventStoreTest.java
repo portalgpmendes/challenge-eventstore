@@ -161,6 +161,18 @@ public class ConcurrentEventStoreTest {
 	}
 	
 	@Test
+	public void testQuery_EventWithInexistentTimeStamp() {
+		try{	
+			createEvents();
+            eventStore.query("Type 1", 20L, 30L);        
+            fail("Shoud have given error!");
+        } catch (IllegalStateException e){
+            assertEquals("Error! There are no events from type Type 1 with startTime greater "
+            		   + "than or equals to 20 and endTime less than 30", e.getMessage());
+        }
+	}
+	
+	@Test
 	public void testQuery_EventWithInexistentType() {
 		try{	
 			createEvents();
