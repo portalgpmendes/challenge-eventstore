@@ -17,7 +17,7 @@ public interface EventStore {
 	
 	
 	/**
-	 * Calculates the total number of events bt type.
+	 * Calculates the total number of events by type.
 	 * @param type
 	 * @return
 	 */
